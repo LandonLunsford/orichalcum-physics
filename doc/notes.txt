@@ -1,0 +1,270 @@
+	
+	2 setups possible
+	view
+		model
+			body
+				geom
+				material
+				
+	view
+		model
+		body
+			geom
+			material
+	
+	I would like to have body have a signal to subscribe to so that 
+	ICollidable/ISimulata
+	
+	view(model(body(geometry(),material())));
+	
+	Model(body){
+		body.changed.add(onChanged);
+	}
+	
+	onChanged(){
+		changed.dispatch();
+	}
+	
+	ISimulatable
+		body:IBody
+	
+
+	
+ISignal
+
+	function hasListener(callback:Function):Boolean;
+	function addListener(callback:Function):ISignalListener;
+	function removeListener(callback:Function):void;
+	function removeListeners():void;
+	function dispatch():void;
+	
+	
+ISignalListener
+	callOnce();
+	call();
+	remove();
+	
+	//remove();//remove?
+
+	
+// common
+orichalcum.utility.Numbers
+orichalcum.utility.Random
+orichalcum.signals.
+orichalcum.physics.simulation
+orichalcum.physics
+orichalcum.physics.body
+orichalcum.physics.collision
+orichalcum.physics.collision.filtering
+orichalcum.physics.collision.detection
+orichalcum.physics.collision.resolution
+orichalcum.physics.collision.handling
+orichalcum.physics.geometry
+orichalcum.physics.material
+orichalcum.physics.view
+orichalcum.physics.context	// all the configs plugins etc. anything leveraging context can implement IPhysicsContextAware
+orichalcum.physics.simulation
+orichalcum.physics.simulation.lifecycle
+orichalcum.physics.integration.VerletIntegrator // not sure I can do this
+
+orichalcum.utility.Numbers
+orichalcum.utility.Random
+
+orichalcum.signals.ISingal
+orichalcum.signals.ISingalListener
+orichalcum.signals.Singal
+orichalcum.signals.SingalListener
+
+orichalcum.physics.api.IBody
+orichalcum.physics.api.ICollidable
+orichalcum.physics.api.ICollision
+orichalcum.physics.api.ICollisionFilter								.filter(collidableA:Object, collidableB:Object):Boolean
+orichalcum.physics.api.ICollisionDetector	IPhysicsContextAware	.detect(geometryA:Object, geometryB:Object):IContact
+orichalcum.physics.api.ICollisionResolver							.resolve(collision:ICollision)
+orichalcum.physics.api.ICollisionHandler
+orichalcum.physics.api.IContact
+orichalcum.physics.api.IPhysicsContext
+orichalcum.physics.api.IPhysicsContextAware
+orichalcum.physics.api.IGeometry
+orichalcum.physics.api.IMaterial
+orichalcum.physics.api.ISimulator
+orichalcum.physics.api.ISimulationPhase
+orichalcum.physics.api.IIntegrator
+
+orichalcum.physics.collision
+orichalcum.physics.collision.filtering
+orichalcum.physics.collision.detection
+orichalcum.physics.collision.resolution
+orichalcum.physics.collision.handling
+orichalcum.physics.geometry
+orichalcum.physics.material
+orichalcum.physics.view
+orichalcum.physics.context	// all the configs plugins etc. anything leveraging context can implement IPhysicsContextAware
+orichalcum.physics.simulation
+orichalcum.physics.simulation.lifecycle
+
+
+
+// to come later
+orichalcum.numerics.IRandomNumberGenerator
+	
+	
+	integrator // in the case of verlet I need access to previous
+		linearVelocityX
+		linearVelocityY
+		angularVelocity
+		integrate(body:IBody);
+		
+		
+	
+	
+package orichalcum.framework.physics
+{
+	
+}
+
+	
+package orichalcum.framework.signal
+{
+
+	public class SignalListener implements ISignalListener
+	{
+		private var _callback:Function;
+		private var _callOnce:Boolean;
+		
+		public function compose(callback:Function):SignalListener
+		{
+			_callback = callback;
+			_callOnce = false;
+			return this;
+		}
+		
+		public function dispose():SignalListener
+		{
+			_callback = null;
+			return this;
+		}
+		
+		public function callOnce():void
+		{
+			_callOnce = true;
+		}
+		
+		public function call():void
+		{
+			_callback();
+		}
+		
+		public function get remove():Boolean
+		{
+			return _callOnce;
+		}
+		
+	}
+
+	public class Signal implements ISignal
+	{
+	
+		static public const listenerPool:Pool = new Pool(
+			function(type:Class):SignalListener { return new type; },
+			function(instance:SignalListener):SignalListener { return instance.dispose(); }
+		);
+		
+		private var _listeners:Vector.<SignalListener>;
+		
+		public function Signal()
+		{
+			_listeners = new Vector.<SignalListener>;
+		}
+		
+		public function dispose():void
+		{
+			_listeners = null;
+		}
+		
+		protected function get listeners():Vector.<SignalListener>
+		{
+			return _listeners;
+		}
+		
+		protected function set listeners(value:Vector.<SignalListener>):void
+		{
+			_listeners = value;
+		}
+		
+		public function hasListeners():Boolean
+		{
+			return totalListeners > 0;
+		}
+	
+		public function hasListener(callback:Function):Boolean
+		{
+			return _listeners.lastIndexOf(callback) >= 0;
+		}
+		
+		public function addListener(callback:Function):ISignalListener
+		{
+			if (callback == null)
+			{
+				throw new NullArgumentError();
+			}
+			
+			/*
+				To prevent infinite chaining of callbacks adding callbacks 
+				I can add them to a limbo list to add later on call()
+			 */
+			
+			_listeners[_listeners.length] = listenerPool.getInstance().compose(callback);
+		}
+		
+		public function removeListener(callback:Function):void
+		{
+			const index:int = _listeners.lastIndexOf(callback);
+			index < 0 || _removeListenerAt(i);
+		}
+		
+		public function dispatch():void
+		{
+			if (hasListeners)
+			{
+				/*
+					later add listeners in limbo here
+				*/
+				_callListeners();
+				_cleanListeners();
+			}
+		}
+		
+		public function removeListeners():void
+		{
+			listenerPool.add.apply(_listeners);
+			_listeners.length = 0;
+		}
+		
+		private function _cleanListeners():void
+		{
+			for (var i:int = _listeners.length - 1; i >= 0; i--)
+			{
+				_listeners[i] || _listeners.splice(i, 1);
+			}
+		}
+		
+		private function _callListeners():void
+		{
+			for (var i:int = 0; i < listeners.length; i++)
+			{
+				var listener:SignalListener = _listeners[i];
+				listener.call();
+				listener.remove && _removeListenerAt(i);
+			}
+		}
+		
+		private function _removeListenerAt(index:int):void
+		{
+			listenerPool.add(_listener[index]);
+			_listeners[index] = null;
+		}
+		
+	}
+}
+	
