@@ -5,8 +5,7 @@ package orichalcum.physics.flyweight
 	public interface IFlyweightAware 
 	{
 		
-		function get contact():Contact;
-		function get collision():Collision;
+		function set flyweights(value:Flyweights):void;
 	}
 
 }
