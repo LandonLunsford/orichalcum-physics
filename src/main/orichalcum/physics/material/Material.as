@@ -1,4 +1,4 @@
-package orichalcum.physics.body.material 
+package orichalcum.physics.material 
 {
 	import orichalcum.mathematics.Mathematics;
 

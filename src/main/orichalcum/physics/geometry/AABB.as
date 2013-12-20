@@ -1,4 +1,4 @@
-package orichalcum.physics.body.geometry 
+package orichalcum.physics.geometry 
 {
 	import orichalcum.geometry.Geometry2;
 

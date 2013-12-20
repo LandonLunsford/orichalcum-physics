@@ -1,6 +1,7 @@
 package orichalcum.physics.force 
 {
-	import orichalcum.physics.IBody;
+	
+	import orichalcum.physics.body.IBody
 	
 	public interface IForce 
 	{

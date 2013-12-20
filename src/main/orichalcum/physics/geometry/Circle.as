@@ -1,4 +1,4 @@
-package orichalcum.physics.body.geometry 
+package orichalcum.physics.geometry 
 {
 
 	public class Circle extends Point

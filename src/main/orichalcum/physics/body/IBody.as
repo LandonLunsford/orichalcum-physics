@@ -1,8 +1,8 @@
-package orichalcum.physics 
+package orichalcum.physics.body 
 {
 	
-	import orichalcum.physics.body.geometry.IGeometry;
-	import orichalcum.physics.body.material.IMaterial;
+	import orichalcum.physics.material.IMaterial
+	import orichalcum.physics.geometry.IGeometry;
 	import orichalcum.physics.force.IForce;
 	
 	public interface IBody

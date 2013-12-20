@@ -1,11 +1,13 @@
 package orichalcum.physics 
 {
 	import flash.display.Sprite;
-	import orichalcum.physics.body.geometry.AABB;
-	import orichalcum.physics.body.geometry.Point;
-	import orichalcum.physics.body.geometry.ui.AABBView;
-	import orichalcum.physics.body.geometry.ui.PointView;
+	import orichalcum.physics.body.IBody;
+	import orichalcum.physics.context.IPhysicsContext;
 	import orichalcum.physics.force.GravitationalRotationForce;
+	import orichalcum.physics.geometry.AABB;
+	import orichalcum.physics.geometry.Point;
+	import orichalcum.physics.geometry.view.AABBView;
+	import orichalcum.physics.geometry.view.PointView;
 
 	public class PhysicsDemo extends Sprite
 	{

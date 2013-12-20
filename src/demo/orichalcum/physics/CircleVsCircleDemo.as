@@ -1,13 +1,13 @@
 package orichalcum.physics 
 {
 	import flash.display.Sprite;
-	import orichalcum.physics.body.geometry.AABB;
-	import orichalcum.physics.body.geometry.Circle;
-	import orichalcum.physics.body.geometry.Point;
-	import orichalcum.physics.body.geometry.ui.AABBView;
-	import orichalcum.physics.body.geometry.ui.CircleView;
-	import orichalcum.physics.body.geometry.ui.PointView;
-	import orichalcum.physics.body.material.Material;
+	import orichalcum.physics.body.IBody;
+	import orichalcum.physics.body.VerletBody;
+	import orichalcum.physics.context.PhysicsContext;
+	import orichalcum.physics.geometry.Circle;
+	import orichalcum.physics.geometry.view.CircleView;
+	import orichalcum.physics.material.Material;
+	import orichalcum.physics.context.IPhysicsContext;
 	import orichalcum.physics.force.GravitationalRotationForce;
 
 	public class CircleVsCircleDemo extends Sprite

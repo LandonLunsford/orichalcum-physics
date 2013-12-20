@@ -1,15 +1,16 @@
 package orichalcum.physics.collision.detection 
 {
-	import orichalcum.physics.collision.ICollision;
-	import orichalcum.physics.ICollidable;
 	
-	public interface ICollisionDetector 
+	import orichalcum.physics.collision.ICollidable;
+	import orichalcum.physics.collision.ICollision;
+	
+	public interface ICollisionDetector
 	{
 		
 		/**
-		 * @return Collision if detected. Null if no collision was detected.
+		 * @return Collision if detected and null if no collision was detected.
 		 */
-		function detect(bodyA:ICollidable, bodyB:ICollidable, flyweight:ICollision = null):ICollision;
+		function detect(collisionA:ICollidable, collisionB:ICollidable):ICollision;
 		
 	}
 

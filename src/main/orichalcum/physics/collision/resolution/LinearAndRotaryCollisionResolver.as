@@ -3,7 +3,7 @@ package orichalcum.physics.collision.resolution
 	import orichalcum.mathematics.Mathematics;
 	import orichalcum.physics.collision.ICollision;
 	import orichalcum.physics.collision.IContact;
-	import orichalcum.physics.IBody;
+	import orichalcum.physics.body.IBody;
 
 
 	public class LinearAndRotaryCollisionResolver implements ICollisionResolver

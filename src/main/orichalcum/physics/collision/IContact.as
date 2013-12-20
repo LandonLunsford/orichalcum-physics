@@ -1,6 +1,6 @@
 package orichalcum.physics.collision 
 {
-	import orichalcum.physics.body.geometry.Point;
+	import orichalcum.physics.geometry.Point;
 	
 	public interface IContact 
 	{

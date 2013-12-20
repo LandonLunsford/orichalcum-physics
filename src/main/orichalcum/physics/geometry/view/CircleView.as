@@ -1,9 +1,8 @@
-package orichalcum.physics.body.geometry.ui 
+package orichalcum.physics.geometry.view 
 {
-	import orichalcum.physics.body.geometry.Circle;
-	import orichalcum.physics.IBody;
-	import orichalcum.physics.ICollidable;
-	import orichalcum.physics.VerletBody;
+	import orichalcum.physics.body.IBody;
+	import orichalcum.physics.collision.ICollidable;
+	import orichalcum.physics.geometry.Circle;
 
 	public class CircleView extends ShapeView implements ICollidable
 	{
@@ -37,9 +36,6 @@ package orichalcum.physics.body.geometry.ui
 			this.x = model.x;
 			this.y = model.y;
 			this.rotation = body.rotation;
-			
-			//trace('rotation', this.rotation, body.rotation, body.angularVelocity)
-			
 			
 			graphics.clear();
 			graphics.beginFill(fillColor);

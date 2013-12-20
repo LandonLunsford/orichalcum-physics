@@ -1,8 +1,8 @@
-package orichalcum.physics.lifecycle 
+package orichalcum.physics.simulation.lifecycle 
 {
 	import orichalcum.physics.force.IForce;
-	import orichalcum.physics.ICollidable;
-	import orichalcum.physics.IPhysicsContext;
+	import orichalcum.physics.collision.ICollidable;
+	import orichalcum.physics.context.IPhysicsContext;
 
 	public class UpdateBodiesPhase implements ILifecyclePhase
 	{

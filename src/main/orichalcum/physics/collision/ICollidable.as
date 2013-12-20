@@ -1,5 +1,7 @@
-package orichalcum.physics 
+package orichalcum.physics.collision 
 {
+	
+	import orichalcum.physics.body.IBody
 	
 	public interface ICollidable 
 	{

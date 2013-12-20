@@ -1,12 +1,12 @@
-package orichalcum.physics 
+package orichalcum.physics.body 
 {
 	import orichalcum.geometry.IGeometry2;
 	import orichalcum.mathematics.Mathematics;
-	import orichalcum.physics.body.geometry.Circle;
-	import orichalcum.physics.body.geometry.IGeometry;
-	import orichalcum.physics.body.material.IMaterial;
-	import orichalcum.physics.body.material.Material;
 	import orichalcum.physics.force.IForce;
+	import orichalcum.physics.geometry.Circle;
+	import orichalcum.physics.geometry.IGeometry;
+	import orichalcum.physics.material.IMaterial;
+	import orichalcum.physics.material.Material;
 
 
 	public class VerletBody implements IBody
@@ -213,8 +213,6 @@ package orichalcum.physics
 			_x = _x + velocityX;
 			_y = _y + velocityY;
 			_rotation = _rotation + angularVelocity;
-			
-			trace('rotation', _rotation);
 			
 			_previousX = previousX;
 			_previousY = previousY;

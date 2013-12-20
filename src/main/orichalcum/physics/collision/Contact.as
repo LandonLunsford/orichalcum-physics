@@ -1,6 +1,6 @@
 package orichalcum.physics.collision 
 {
-	import orichalcum.physics.body.geometry.Point;
+	import orichalcum.physics.geometry.Point;
 	
 	public class Contact implements IContact
 	{
@@ -30,7 +30,7 @@ package orichalcum.physics.collision
 			return _penetration;
 		}
 		
-		public function initialize(pointX:Number, pointY:Number, normalX:Number, normalY:Number, penetration:Number):IContact
+		public function compose(pointX:Number, pointY:Number, normalX:Number, normalY:Number, penetration:Number):IContact
 		{
 			_point.x = pointX;
 			_point.y = pointY;
@@ -38,6 +38,12 @@ package orichalcum.physics.collision
 			_normal.y = normalY;
 			_penetration = penetration;
 			return this;
+		}
+		
+		public function dispose():void
+		{
+			_point = null;
+			_normal = null;
 		}
 		
 		public function toString():String

@@ -1,4 +1,4 @@
-package orichalcum.physics.body.geometry.ui 
+package orichalcum.physics.geometry.view 
 {
 	import flash.geom.Point;
 	import orichalcum.physics.body.geometry.Circle;

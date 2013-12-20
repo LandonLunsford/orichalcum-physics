@@ -1,7 +1,7 @@
 package orichalcum.physics.collision 
 {
-	import orichalcum.geometry.Point2;
-	import orichalcum.physics.ICollidable;
+	
+	import orichalcum.physics.collision.ICollidable;
 
 	public class Collision implements ICollision
 	{
@@ -24,7 +24,7 @@ package orichalcum.physics.collision
 			return _contacts;
 		}
 		
-		public function initialize(collidableA:ICollidable, collidableB:ICollidable, ...contacts):ICollision
+		public function compose(collidableA:ICollidable, collidableB:ICollidable, ...contacts):ICollision
 		{
 			_collidableA = collidableA;
 			_collidableB = collidableB;
@@ -37,6 +37,13 @@ package orichalcum.physics.collision
 				}
 			}
 			return this;
+		}
+		
+		public function dispose():void
+		{
+			_collidableA = null;
+			_collidableB = null;
+			_contacts = null;
 		}
 		
 		public function toString():String

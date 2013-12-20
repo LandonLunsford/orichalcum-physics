@@ -4,21 +4,29 @@
 
 package orichalcum.physics.collision.detection 
 {
-	import orichalcum.mathematics.Mathematics;
-	import orichalcum.physics.body.geometry.Circle;
+	import orichalcum.physics.body.IBody;
 	import orichalcum.physics.collision.Collision;
 	import orichalcum.physics.collision.Contact;
+	import orichalcum.physics.collision.ICollidable;
 	import orichalcum.physics.collision.ICollision;
-	import orichalcum.physics.collision.IContact;
-	import orichalcum.physics.ICollidable;
+	import orichalcum.physics.context.IPhysicsContext;
+	import orichalcum.physics.context.IPhysicsContextAware;
+	import orichalcum.physics.geometry.Circle;
 	
-	public class CircleCircleCollisionDetector implements ICollisionDetector
+	public class CircleCircleCollisionDetector implements ICollisionDetector, IPhysicsContextAware
 	{
 		
-		public function detect(bodyA:ICollidable, bodyB:ICollidable, flyweight:ICollision = null):ICollision 
+		private var _physicsContext:IPhysicsContext;
+		
+		public function set physicsContext(value:IPhysicsContext):void
 		{
-			const circleA:Circle = bodyA.body.geometry as Circle;
-			const circleB:Circle = bodyB.body.geometry as Circle;
+			_physicsContext = value;
+		}
+		
+		public function detect(collidableA:ICollidable, collidableB:ICollidable):ICollision
+		{
+			const circleA:Circle = collidableA.body.geometry as Circle;
+			const circleB:Circle = collidableB.body.geometry as Circle;
 			const distanceX:Number = circleB.x - circleA.x;
 			const distanceY:Number = circleB.y - circleA.y;
 			const squareDistance:Number = distanceX * distanceX + distanceY * distanceY;
@@ -34,10 +42,10 @@ package orichalcum.physics.collision.detection
 			
 			if (distance == 0)
 			{
-				return collision.initialize(
-					bodyA,
-					bodyB,
-					contact.initialize(
+				return _physicsContext.collision().compose(
+					collidableA,
+					collidableB,
+						contact.compose(
 						circleA.x,
 						circleA.y,
 						1,
@@ -51,10 +59,10 @@ package orichalcum.physics.collision.detection
 				const normalX:Number = distanceX / distance;
 				const normalY:Number = distanceY / distance;
 				
-				return collision.initialize(
-					bodyA,
-					bodyB,
-					contact.initialize(
+				return _physicsContext.collision().compose(
+					collidableA,
+					collidableB,
+						contact.compose(
 						circleA.x + normalX * circleA.radius,
 						circleA.y + normalY * circleA.radius,
 						normalX,

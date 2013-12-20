@@ -1,7 +1,7 @@
 package orichalcum.physics.collision 
 {
-	import orichalcum.geometry.Point2;
-	import orichalcum.physics.ICollidable;
+	
+	import orichalcum.physics.collision.ICollidable;
 	
 	public interface ICollision 
 	{

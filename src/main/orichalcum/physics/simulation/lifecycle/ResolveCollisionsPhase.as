@@ -1,18 +1,22 @@
-package orichalcum.physics.lifecycle 
+package orichalcum.physics.simulation.lifecycle 
 {
+	import flash.utils.getQualifiedClassName;
 	import orichalcum.physics.collision.detection.CircleCircleCollisionDetector;
 	import orichalcum.physics.collision.detection.filter.ICollisionFilter;
 	import orichalcum.physics.collision.detection.ICollisionDetector;
+	import orichalcum.physics.collision.ICollidable;
 	import orichalcum.physics.collision.ICollision;
 	import orichalcum.physics.collision.resolution.ICollisionResolver;
 	import orichalcum.physics.collision.resolution.LinearAndRotaryCollisionResolver;
-	import orichalcum.physics.collision.resolution.LinearCollisionResolver;
-	import orichalcum.physics.IBody;
-	import orichalcum.physics.ICollidable;
-	import orichalcum.physics.IPhysicsContext;
+	import orichalcum.physics.context.IPhysicsContext;
 
 	public class ResolveCollisionsPhase implements ILifecyclePhase
 	{
+		
+		private var _collidableIdGetter:Function = function(collidable:ICollidable):Object
+		{
+			return collidable.body.geometry;
+		};
 		
 		public function apply(context:IPhysicsContext):void 
 		{
@@ -24,10 +28,10 @@ package orichalcum.physics.lifecycle
 			{
 				for (var j:int = i + 1; j < totalBodies; j++)
 				{
-					var bodyA:ICollidable = bodies[i];
-					var bodyB:ICollidable = bodies[j];
+					var collidableA:ICollidable = bodies[i];
+					var collidableB:ICollidable = bodies[j];
 					
-					if (!isCollisionCandidate(collisionFilters, bodyA, bodyB)) continue;
+					if (!isCollisionCandidate(collisionFilters, collidableA, collidableB)) continue;
 					
 					
 					
@@ -54,9 +58,9 @@ package orichalcum.physics.lifecycle
 					
 					
 					
-					trace('collision passed broadphase', bodyA, bodyB);
+					trace('collision passed broadphase', collidableA, collidableB);
 					
-					var detector:ICollisionDetector = new CircleCircleCollisionDetector;
+					var detector:ICollisionDetector = context.getDetector(collidableA, collidableB, _collidableIdGetter);
 					
 					if (!detector)
 					{
@@ -64,7 +68,7 @@ package orichalcum.physics.lifecycle
 						continue;
 					}
 					
-					var collision:ICollision = detector.detect(bodyA, bodyB);
+					var collision:ICollision = detector.detect(collidableA, collidableB);
 					
 					if (!collision)
 					{
