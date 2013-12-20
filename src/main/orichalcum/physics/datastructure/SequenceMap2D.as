@@ -12,13 +12,13 @@ package orichalcum.physics.datastructure
 			return this;
 		}
 		
-		public function map(a:*, b:*, value:*):SequenceMap
+		public function map(a:*, b:*, value:*):SequenceMap2D
 		{
 			(_data[a] ||= new Dictionary(true))[b] = value;
 			return this;
 		}
 		
-		public function unmap(a:*, b:*):SequenceMap
+		public function unmap(a:*, b:*):SequenceMap2D
 		{
 			if (a in _data && b in _data[a]) delete _data[a][b];
 			return this;
