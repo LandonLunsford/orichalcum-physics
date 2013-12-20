@@ -1,6 +1,9 @@
 package orichalcum.physics.flyweight
 {
 
+	import orichalcum.physics.collision.Collision;
+	import orichalcum.physics.collision.Contact;
+
 	public class Flyweights
 	{
 	
