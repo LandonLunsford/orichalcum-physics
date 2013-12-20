@@ -39,6 +39,13 @@ package orichalcum.physics.collision
 			return this;
 		}
 		
+		public function getCollidable(type:Class):*
+		{
+			if (collidableA is type) return collidableA;
+			if (collidableB is type) return collidableB;
+			throw new ArgumentError();
+		}
+		
 		public function dispose():void
 		{
 			_collidableA = null;
