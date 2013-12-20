@@ -54,8 +54,8 @@
   </includeLibraries>
   <!-- SWC Libraries -->
   <libraryPaths>
-    <element path="lib\orichalcum-commons-1.0.2.swc" />
     <element path="lib\flexunit-4.1.0-8-as3_4.1.0.16076.swc" />
+    <element path="lib\orichalcum-commons-1.0.3.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
