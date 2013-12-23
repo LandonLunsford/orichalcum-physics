@@ -11,6 +11,8 @@ package orichalcum.physics.collision
 		
 		function onBodyChange():void;
 		
+		//function get typeId():int;
+		
 	}
 
 }

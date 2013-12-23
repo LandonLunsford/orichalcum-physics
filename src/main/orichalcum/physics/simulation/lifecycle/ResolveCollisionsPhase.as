@@ -1,66 +1,62 @@
 package orichalcum.physics.simulation.lifecycle 
 {
-	import flash.utils.getQualifiedClassName;
-	import orichalcum.physics.collision.detection.CircleCircleCollisionDetector;
+	import orichalcum.physics.body.BodyType;
 	import orichalcum.physics.collision.detection.filter.ICollisionFilter;
 	import orichalcum.physics.collision.detection.ICollisionDetector;
 	import orichalcum.physics.collision.ICollidable;
 	import orichalcum.physics.collision.ICollision;
 	import orichalcum.physics.collision.resolution.ICollisionResolver;
-	import orichalcum.physics.collision.resolution.LinearAndRotaryCollisionResolver;
+	import orichalcum.physics.collision.resolution.ImpulseCollisionResolver;
+	import orichalcum.physics.collision.resolution.PositionalCollisionResolver;
+	import orichalcum.physics.collision.resolution.RotationlessImpulseCollisionResolver;
 	import orichalcum.physics.context.IPhysicsContext;
 
+	/**
+	 * Ideally bodytypes hould be separated into different datastructures for optimal looping
+	 * With this however you would loose the flexibility of simply assigning bodies different types on the fly
+	 */
 	public class ResolveCollisionsPhase implements ILifecyclePhase
 	{
 		
-		private var _collidableIdGetter:Function = function(collidable:ICollidable):Object
-		{
-			return collidable.body.geometry;
-		};
-		
 		public function apply(context:IPhysicsContext):void 
 		{
-			const bodies:Vector.<ICollidable> = context.bodies;
-			const totalBodies:int = bodies.length;
+			const collidables:Vector.<ICollidable> = context.bodies;
+			const totalCollidables:int = collidables.length;
 			const collisionFilters:Vector.<ICollisionFilter> = context.collisionFilters;
 			
-			for (var i:int = 0; i < totalBodies; i++)
+			for (var i:int = 0; i < totalCollidables; i++)
 			{
-				for (var j:int = i + 1; j < totalBodies; j++)
+				
+				var collidableA:ICollidable = collidables[i];
+				
+				/**
+				 * Kinetics do not obey the laws of physics
+				 * Only check dynamics against statics
+				 */
+				if (collidableA.body.type & BodyType.KINETIC & BodyType.STATAIC) continue;
+				
+				
+				for (var j:int = i + 1; j < totalCollidables; j++)
 				{
-					var collidableA:ICollidable = bodies[i];
-					var collidableB:ICollidable = bodies[j];
 					
-					if (!isCollisionCandidate(collisionFilters, collidableA, collidableB)) continue;
+					var collidableB:ICollidable = collidables[j];
 					
+					/**
+					 * Kinetics do not obey the laws of physics
+					 */
+					if (collidableB.body.type & BodyType.KINETIC) continue;
 					
-					
-					// optional
-					//if (bodyA.layer != bodyB.layer) continue;
-					
-					// maybe just make htis part dynamic "collisionFilters"
-					/*
-						// filter examples
-						sameLayerFilter = function(bodyA:IBody, bodyB:IBody):void
-						{
-							return bodyA.layer == bodyB.layer;
-						}
-						aabbIntersectionFilter = function(bodyA:IBody, bodyB:IBody):void
-						{
-							return bodyA.geometry.aabb.intersects(bodyB.geometry.aabb);
-						}
-					*/
-					//if (bodyA.geometry.aabb.intersects(bodyB.geometry.aabb))
-					//{
-						//bodies.push(bodyA, bodyB);
-					//}
+					/**
+					 * Apply user filters beyond body type combination filters
+					 * Additionally broadphases can be implemented here
+					 */
+					if (!isCollisionCandidate(collisionFilters, collidableA, collidableB))
+						continue;
 					
 					
+					//trace('collision passed broadphase', collidableA, collidableB);
 					
-					
-					trace('collision passed broadphase', collidableA, collidableB);
-					
-					var detector:ICollisionDetector = context.getDetector(collidableA, collidableB, _collidableIdGetter);
+					var detector:ICollisionDetector = context.getDetector(collidableA.body.geometry, collidableB.body.geometry);
 					
 					if (!detector)
 					{
@@ -80,20 +76,21 @@ package orichalcum.physics.simulation.lifecycle
 						trace('collision passed finephase');
 					}
 					
-					trace('collision detected.', collision);
+					//trace('collision detected.', collision);
 					
-					//var resolver:ICollisionResolver = new LinearCollisionResolver;
-					var resolver:ICollisionResolver = new LinearAndRotaryCollisionResolver;
+					//var resolver:ICollisionResolver = new RotationlessImpulseCollisionResolver;
+					var resolver:ICollisionResolver = new PositionalCollisionResolver;
+					//var resolver:ICollisionResolver = new ImpulseCollisionResolver;
 					
 					if (!resolver)
 					{
-						trace('collision resolution skipped. no resolver is mapped');
+						//trace('collision resolution skipped. no resolver is mapped');
 						continue;
 					}
 					
 					resolver.resolve(collision);
 					
-					trace('collision resolved.');
+					//trace('collision resolved.');
 					
 				}
 			}

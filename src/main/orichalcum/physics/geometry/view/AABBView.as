@@ -1,8 +1,8 @@
 package orichalcum.physics.geometry.view 
 {
-	import orichalcum.physics.body.geometry.AABB;
-	import orichalcum.physics.IBody;
-	import orichalcum.physics.ICollidable;
+	import orichalcum.physics.body.IBody;
+	import orichalcum.physics.collision.ICollidable;
+	import orichalcum.physics.geometry.AABB;
 
 	public class AABBView extends ShapeView implements ICollidable
 	{

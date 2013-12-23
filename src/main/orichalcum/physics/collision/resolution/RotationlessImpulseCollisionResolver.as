@@ -2,15 +2,16 @@ package orichalcum.physics.collision.resolution
 {
 	import orichalcum.physics.collision.ICollision;
 	import orichalcum.physics.collision.IContact;
-	import orichalcum.physics.IBody;
+	import orichalcum.physics.body.IBody;
 
-	public class LinearCollisionResolver implements ICollisionResolver
+	public class RotationlessImpulseCollisionResolver implements ICollisionResolver
 	{
 		
-		public function LinearCollisionResolver() 
-		{
-			
-		}
+		/**
+		 * Refactor to physicsContext.settings
+		 */
+		private var slop:Number = 0.01;
+		private var percent:Number = 0.8;
 		
 		public function resolve(collision:ICollision):void 
 		{
@@ -23,10 +24,12 @@ package orichalcum.physics.collision.resolution
 			const normalY:Number = contact.normal.y;
 			
 			const totalInverseMass:Number = inverseMassA + inverseMassB;
-			const t:Number = contact.penetration / totalInverseMass;
+			const totalInverseMassInversed:Number = totalInverseMass == 0 ? 0 : 1 / totalInverseMass;
+			const t:Number = Math.max(contact.penetration - slop, 0) * totalInverseMassInversed * percent;
+			//const t:Number = contact.penetration * totalInverseMassInversed * percent;
 			const separationX:Number = normalX * t;
 			const separationY:Number = normalY * t;
-			
+						
 			bodyA.x -= separationX * inverseMassA;
 			bodyA.y -= separationY * inverseMassA;
 			bodyB.x += separationX * inverseMassB;
@@ -40,13 +43,12 @@ package orichalcum.physics.collision.resolution
 			const restitution:Number = Math.min(bodyA.material.elasticity, bodyB.material.elasticity)
 			const impulse:Number = ( -(1 + restitution) * velocityAlongNormal ) / totalInverseMass;
 			
+			// how does this work with verlet integration. I forsee issues
 			bodyA.linearVelocityX -= inverseMassA * normalX * impulse;
 			bodyA.linearVelocityY -= inverseMassA * normalY * impulse;
 			bodyB.linearVelocityX += inverseMassB * normalX * impulse;
 			bodyB.linearVelocityY += inverseMassB * normalY * impulse;
 			
-			//bodyA.rest();
-			//bodyB.rest();
 		}
 		
 	}

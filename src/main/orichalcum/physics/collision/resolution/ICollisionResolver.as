@@ -4,6 +4,7 @@ package orichalcum.physics.collision.resolution
 	
 	public interface ICollisionResolver 
 	{
+		
 		/**
 		 * 
 		 */

@@ -6,11 +6,11 @@ package orichalcum.physics.collision.detection.filter
 		
 		/**
 		 * Return true if bodies are candidates for collision detection analysis
-		 * @param	bodyA
-		 * @param	bodyB
+		 * @param	collidableA
+		 * @param	collidableB
 		 * @return
 		 */
-		function apply(bodyViewA:Object, bodyViewB:Object):Boolean;
+		function apply(collidableA:Object, collidableB:Object):Boolean;
 		
 	}
 

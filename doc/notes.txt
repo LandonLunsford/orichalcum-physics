@@ -1,4 +1,28 @@
+
+Optimal collision mapping lookup will use int IDs
+
+ICollidable
+	collidableId:int
 	
+IGeometry
+	geometryId:int
+	
+physicsContext.registerGeometry(Circle, 0);
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	2 setups possible
 	view
 		model

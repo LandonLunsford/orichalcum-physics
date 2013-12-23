@@ -54,7 +54,7 @@ package orichalcum.physics.geometry
 		
 		public function get inertia():Number 
 		{
-			return _width * _height * _height * _height / 12;
+			return _width * _height * _height * _height * (1 / 12);
 		}
 		
 		public function get inverseInertia():Number 

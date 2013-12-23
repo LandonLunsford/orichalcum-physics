@@ -5,14 +5,19 @@ package orichalcum.physics.collision.resolution
 	import orichalcum.physics.collision.IContact;
 	import orichalcum.physics.body.IBody;
 
-
-	public class LinearAndRotaryCollisionResolver implements ICollisionResolver
+	/**
+	 * This algorithm is unstable at times...
+	 * Sometimes the impulses will exceed bounds
+	 * and collidables grow in energy as energy is transfered
+	 */
+	public class ImpulseCollisionResolver implements ICollisionResolver
 	{
 		
-		public function LinearAndRotaryCollisionResolver() 
-		{
-			
-		}
+		/**
+		 * Refactor to physicsContext.settings
+		 */
+		private var slop:Number = 0.01;
+		private var percent:Number = 0.8;
 		
 		public function resolve(collision:ICollision):void 
 		{
@@ -32,8 +37,8 @@ package orichalcum.physics.collision.resolution
 			const elasticityB:Number = bodyB.material.elasticity;
 			
 			const totalInverseMass:Number = inverseMassA + inverseMassB;
-			const totalInverseMassInversed:Number = 1 / totalInverseMass;
-			const t:Number = contact.penetration * totalInverseMassInversed;
+			const totalInverseMassInversed:Number = totalInverseMass == 0 ? 0 : 1 / totalInverseMass;
+			const t:Number = Math.max(contact.penetration - slop, 0) * totalInverseMassInversed * percent;
 			const separationX:Number = normalX * t;
 			const separationY:Number = normalY * t;
 			
@@ -75,8 +80,11 @@ package orichalcum.physics.collision.resolution
 				+ contactPerpTangent2 * contactPerpTangent2 * inverseIB;
 			
 			const restitution:Number = Math.min(elasticityA, elasticityB);//var restitution = (body1.elasticity + body2.elasticity) * 0.5;
-			const friction:Number = (frictionA + frictionB) * 0.5;
-
+			//const friction:Number = (frictionA + frictionB) * 0.5;
+			
+			// seems friction greater than .001 doesnt make sense...
+			const friction:Number = 0.1;
+			
 			const impulse1:Number = (-(1 + restitution) * velocityAlongNormal) / impulseDenominator1;
 			const impulse2:Number = friction * -(relativeVelocityX * tangentX + relativeVelocityY * tangentY) / impulseDenominator2;
 
@@ -94,6 +102,15 @@ package orichalcum.physics.collision.resolution
 			bodyA.angularVelocity -= (contactPerpNormal2 * -impulse1 * inverseIB + contactPerpTangent2 * -impulse2 * inverseIB) * Mathematics.RADIAN_TO_DEGREE;
 				
 			//trace('i2', impulse2)
+			
+			/**
+			 * DEBUG
+			 */
+			
+			if (bodyB.linearVelocityX * bodyB.linearVelocityX + bodyB.linearVelocityY * bodyB.linearVelocityY > 512)
+			{
+				trace('too big')
+			}
 			
 		}
 		

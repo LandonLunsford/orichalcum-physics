@@ -9,7 +9,7 @@ package orichalcum.physics.body
 	import orichalcum.physics.material.Material;
 
 
-	public class VerletBody implements IBody
+	public class Body implements IBody
 	{
 		private var _x:Number = 0;
 		private var _y:Number = 0;
@@ -17,14 +17,15 @@ package orichalcum.physics.body
 		private var _previousX:Number = 0;
 		private var _previousY:Number = 0;
 		private var _previousRotation:Number = 0;
-		private var _changed:Boolean = true;
+		private var _type:int = BodyType.DYNAMIC;
 		private var _geometry:IGeometry;
 		private var _material:IMaterial;
 		private var _centerX:Number;
 		private var _centerY:Number;
 		private var _forces:Vector.<IForce> = new Vector.<IForce>;
+		private var _changed:Boolean = true;
 		
-		public function VerletBody(geometry:IGeometry = null, material:IMaterial = null) 
+		public function Body(geometry:IGeometry = null, material:IMaterial = null) 
 		{
 			this.geometry = geometry ? geometry : new Circle(0,0,1);
 			this.material = material ? material : Material.ROCK;
@@ -38,6 +39,7 @@ package orichalcum.physics.body
 		public function set x(value:Number):void 
 		{
 			_geometry.x = value;
+			_changed = true;
 		}
 		
 		public function get y():Number 
@@ -48,6 +50,7 @@ package orichalcum.physics.body
 		public function set y(value:Number):void 
 		{
 			_geometry.y = value;
+			_changed = true;
 		}
 		
 		public function get rotation():Number 
@@ -58,6 +61,7 @@ package orichalcum.physics.body
 		public function set rotation(value:Number):void 
 		{
 			_rotation = value;
+			_changed = true;
 		}
 		
 		public function get linearVelocityX():Number 
@@ -162,6 +166,16 @@ package orichalcum.physics.body
 		public function set changed(value:Boolean):void
 		{
 			_changed = value;
+		}
+		
+		public function get type():int
+		{
+			return _type;
+		}
+		
+		public function set type(value:int):void
+		{
+			_type = value;
 		}
 		
 		public function get geometry():IGeometry 

@@ -12,9 +12,9 @@ package orichalcum.physics.context
 	public interface IPhysicsContext
 	{
 		
-		function mapDetector(typeA:Class, typeB:Class, detector:ICollisionDetector):IPhysicsContext;
-		function unmapDetector(typeA:Class, typeB:Class):IPhysicsContext;
-		function getDetector(collidableA:Object, collidableB:Object, collidableIdGetter:Function = null):ICollisionDetector;
+		function mapDetector(geometryTypeA:Class, geometryTypeB:Class, detector:ICollisionDetector):IPhysicsContext;
+		function unmapDetector(geometryTypeA:Class, geometryTypeB:Class):IPhysicsContext;
+		function getDetector(geometryA:Object, geometryB:Object):ICollisionDetector;
 		
 		function get lifecycle():Vector.<ILifecyclePhase>;
 		function set lifecycle(value:Vector.<ILifecyclePhase>):void;

@@ -6,6 +6,7 @@ package orichalcum.physics.context
 	import orichalcum.animation.Animation;
 	import orichalcum.physics.collision.Collision;
 	import orichalcum.physics.collision.Contact;
+	import orichalcum.physics.collision.detection.AABBAABBCollisionDetector;
 	import orichalcum.physics.collision.detection.CircleCircleCollisionDetector;
 	import orichalcum.physics.collision.detection.filter.AABBIntersectionCollisionFilter;
 	import orichalcum.physics.collision.detection.filter.ICollisionFilter;
@@ -13,6 +14,7 @@ package orichalcum.physics.context
 	import orichalcum.physics.collision.ICollidable;
 	import orichalcum.physics.datastructure.CombinationMap;
 	import orichalcum.physics.force.IForce;
+	import orichalcum.physics.geometry.AABB;
 	import orichalcum.physics.geometry.Circle;
 	import orichalcum.physics.simulation.lifecycle.ILifecyclePhase;
 	import orichalcum.physics.simulation.lifecycle.RenderViewsPhase;
@@ -36,7 +38,6 @@ package orichalcum.physics.context
 		private var _collisionFlyweight:Collision;
 		private var _contactFlyweight:Contact;
 		private var _detectors:CombinationMap;
-		private var _detectorKeyGenerator:Function = function(value:Object):* { return getQualifiedClassName(value); };
 		
 		public function PhysicsContext() 
 		{
@@ -57,6 +58,7 @@ package orichalcum.physics.context
 			
 			_detectors = new CombinationMap;
 			
+			mapDetector(AABB, AABB, new AABBAABBCollisionDetector)
 			mapDetector(Circle, Circle, new CircleCircleCollisionDetector)
 			
 			this.isPlaying = true;
@@ -169,28 +171,29 @@ package orichalcum.physics.context
 			return _collisionFlyweight;
 		}
 		
-		public function mapDetector(typeA:Class, typeB:Class, detector:ICollisionDetector):IPhysicsContext
+		public function mapDetector(geometryTypeA:Class, geometryTypeB:Class, detector:ICollisionDetector):IPhysicsContext
 		{
 			if (detector is IPhysicsContextAware)
 			{
 				(detector as IPhysicsContextAware).physicsContext = this;
 			}
+			
 			/**
 			 * This key generation should be standard and then the getDetector one should be custom perhaps
 			 */
 			_detectors.map(
-				_detectorKeyGenerator(typeA),
-				_detectorKeyGenerator(typeB),
+				getQualifiedClassName(geometryTypeA),
+				getQualifiedClassName(geometryTypeB),
 				detector
 			);
 			return this;
 		}
 		
-		public function unmapDetector(typeA:Class, typeB:Class):IPhysicsContext
+		public function unmapDetector(geometryTypeA:Class, geometryTypeB:Class):IPhysicsContext
 		{
 			
-			const a:String = _detectorKeyGenerator(typeA);
-			const b:String = _detectorKeyGenerator(typeB);
+			const a:String = getQualifiedClassName(geometryTypeA);
+			const b:String = getQualifiedClassName(geometryTypeB);
 			const detector:ICollisionDetector = _detectors.at(a, b);
 			if (detector is IPhysicsContextAware)
 			{
@@ -200,15 +203,11 @@ package orichalcum.physics.context
 			return this;
 		}
 		
-		public function getDetector(collidableA:Object, collidableB:Object, collidableIdGetter:Function = null):ICollisionDetector
+		public function getDetector(geometryA:Object, geometryB:Object):ICollisionDetector
 		{
-			const idGetter:Function = collidableIdGetter != null
-				? collidableIdGetter
-				: FunctionUtil.NULL_PIPE;
-				
 			return _detectors.at(
-				_detectorKeyGenerator(idGetter(collidableA)),
-				_detectorKeyGenerator(idGetter(collidableB))
+				getQualifiedClassName(geometryA),
+				getQualifiedClassName(geometryB)
 			);
 		}
 		

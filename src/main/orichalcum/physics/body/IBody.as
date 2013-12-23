@@ -28,7 +28,10 @@ package orichalcum.physics.body
 		function get centerY():Number;
 		function set centerY(value:Number):void;
 		
+		function get mass():Number;
 		function get inverseMass():Number;
+		
+		function get inertia():Number;
 		function get inverseInertia():Number;
 		
 		
@@ -37,6 +40,9 @@ package orichalcum.physics.body
 		
 		function rest():void;
 		function wake():void;
+		
+		function get type():int;
+		function set type(value:int):void;
 		
 		function get geometry():IGeometry;
 		function set geometry(value:IGeometry):void;
