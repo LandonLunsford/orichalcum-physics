@@ -1,6 +1,5 @@
 package orichalcum.physics.geometry 
 {
-	import orichalcum.geometry.Geometry2;
 
 	public class AABB implements IGeometry
 	{
@@ -141,6 +140,11 @@ package orichalcum.physics.geometry
 				&& bottom >= aabb.top
 				&& top <= aabb.bottom;
 		}
+		
+		//public function toPolygon(flyweight:Polygon):Polygon
+		//{
+			//return null;
+		//}
 		
 	}
 

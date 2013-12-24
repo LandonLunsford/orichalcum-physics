@@ -25,15 +25,31 @@ package orichalcum.physics.collision.resolution
 			
 			const totalInverseMass:Number = inverseMassA + inverseMassB;
 			const totalInverseMassInversed:Number = totalInverseMass == 0 ? 0 : 1 / totalInverseMass;
-			const t:Number = Math.max(contact.penetration - slop, 0) * totalInverseMassInversed * percent;
-			//const t:Number = contact.penetration * totalInverseMassInversed * percent;
+			
+			/**
+			 * Allow for slop
+			 */
+			//const t:Number = Math.max(contact.penetration - slop, 0) * totalInverseMassInversed * percent;
+			
+			/**
+			 * Slopless precision!
+			 */
+			const t:Number = contact.penetration * totalInverseMassInversed * percent;
+			
 			const separationX:Number = normalX * t;
 			const separationY:Number = normalY * t;
-						
-			bodyA.x -= separationX * inverseMassA;
-			bodyA.y -= separationY * inverseMassA;
-			bodyB.x += separationX * inverseMassB;
-			bodyB.y += separationY * inverseMassB;
+			
+			/**
+			 * Because I am verlet integrated this should truly be a view correction not a data correction...
+			 * This will lead to inaccurate velocities otherwise
+			 */
+			const inverseMassPortionA:Number = totalInverseMass - inverseMassB;
+			const inverseMassPortionB:Number = totalInverseMass - inverseMassA;
+			bodyA.x -= separationX * inverseMassPortionA;
+			bodyA.y -= separationY * inverseMassPortionA;
+			bodyB.x += separationX * inverseMassPortionB;
+			bodyB.y += separationY * inverseMassPortionB;
+			
 			
 			const relativeVelocityX:Number = bodyB.linearVelocityX - bodyA.linearVelocityX;
 			const relativeVelocityY:Number = bodyB.linearVelocityY - bodyA.linearVelocityY;
@@ -44,10 +60,10 @@ package orichalcum.physics.collision.resolution
 			const impulse:Number = ( -(1 + restitution) * velocityAlongNormal ) / totalInverseMass;
 			
 			// how does this work with verlet integration. I forsee issues
-			bodyA.linearVelocityX -= inverseMassA * normalX * impulse;
-			bodyA.linearVelocityY -= inverseMassA * normalY * impulse;
-			bodyB.linearVelocityX += inverseMassB * normalX * impulse;
-			bodyB.linearVelocityY += inverseMassB * normalY * impulse;
+			bodyA.linearVelocityX -= inverseMassPortionA * normalX * impulse;
+			bodyA.linearVelocityY -= inverseMassPortionA * normalY * impulse;
+			bodyB.linearVelocityX += inverseMassPortionB * normalX * impulse;
+			bodyB.linearVelocityY += inverseMassPortionB * normalY * impulse;
 			
 		}
 		

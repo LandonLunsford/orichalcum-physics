@@ -8,7 +8,7 @@ package orichalcum.physics
 	import orichalcum.physics.geometry.view.CircleView;
 	import orichalcum.physics.material.Material;
 	import orichalcum.physics.context.IPhysicsContext;
-	import orichalcum.physics.force.GravitationalRotationForce;
+	import orichalcum.physics.force.RadialRotationForce;
 
 	public class CircleVsCircleDemo extends Sprite
 	{

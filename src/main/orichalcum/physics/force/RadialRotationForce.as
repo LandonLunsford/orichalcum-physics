@@ -6,12 +6,12 @@ package orichalcum.physics.force
 	import orichalcum.physics.IBody;
 	import orichalcum.utility.MathUtil;
 
-	public class GravitationalRotationForce implements IForce
+	public class RadialRotationForce implements IForce
 	{
 		
 		private var _point:Point;
 		
-		public function GravitationalRotationForce(point:Point) 
+		public function RadialRotationForce(point:Point) 
 		{
 			_point = point;
 		}

@@ -10,7 +10,9 @@ package orichalcum.physics
 	import orichalcum.physics.body.IBody;
 	import orichalcum.physics.context.IPhysicsContext;
 	import orichalcum.physics.context.PhysicsContext;
+	import orichalcum.physics.force.PlanarGravitaionalForce;
 	import orichalcum.physics.geometry.AABB;
+	import orichalcum.physics.geometry.Point;
 	import orichalcum.physics.geometry.view.AABBView;
 	import orichalcum.physics.material.Material;
 
@@ -25,9 +27,10 @@ package orichalcum.physics
 		
 		public function AABBvAABB() 
 		{
-			const aabbA:AABB = new AABB(stage.stageWidth * 0.5, stage.stageHeight * 0.45, stage.stageWidth * 0.1, stage.stageWidth * 0.1);
+			const aabbA:AABB = new AABB(stage.stageWidth * 0.5, stage.stageHeight * 0.5, stage.stageWidth * 0.1, stage.stageWidth * 0.1);
 			const aabbBodyA:IBody = new Body(aabbA, Material.ROCK);
 			const aabbViewA:AABBView = new AABBView(aabbBodyA, 0xabcdef, 0x333333, 1);
+			aabbBodyA.type = BodyType.STATIC;
 			
 			const aabbB:AABB = new AABB(stage.stageWidth * 0.1, stage.stageHeight * 0.5, stage.stageWidth * 0.1, stage.stageWidth * 0.1);
 			const aabbBodyB:IBody = new Body(aabbB, Material.ROCK);
@@ -39,26 +42,31 @@ package orichalcum.physics
 			const aabbViewC:AABBView = new AABBView(aabbBodyC, 0xabcdef, 0x333333, 1);
 			aabbBodyC.linearVelocityX = -_playerSpeed;
 			
+			
+			const aabbD:AABB = new AABB(stage.stageWidth * 0.5, -stage.stageHeight * 0, stage.stageWidth * 0.1, stage.stageWidth * 0.1);
+			const aabbBodyD:IBody = new Body(aabbD, Material.ROCK);
+			const aabbViewD:AABBView = new AABBView(aabbBodyD, 0xabcdef, 0x333333, 1);
+			
 			addChild(aabbViewA);
 			addChild(aabbViewB);
 			addChild(aabbViewC);
-			
-			aabbViewA.alpha = 0.5;
-			aabbViewB.alpha = 0.5;
-			aabbViewC.alpha = 0.5;
+			addChild(aabbViewD);
 			
 			_context = new PhysicsContext();
 			_context.bodies.push(aabbViewA);
 			_context.bodies.push(aabbViewB);
 			_context.bodies.push(aabbViewC);
+			_context.bodies.push(aabbViewD);
 			
 			_player = aabbViewB;
-			//_player.linearVelocityX = 8;
 			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, stage_onKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, stage_onKeyUp);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, stage_onMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_UP, stage_onMouseUp);
+			
+			
+			aabbBodyD.forces.push(new PlanarGravitaionalForce(new Point(0, 1)));
 		}
 		
 		private function stage_onMouseDown(event:MouseEvent):void 

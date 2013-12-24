@@ -32,8 +32,8 @@ package orichalcum.physics.collision
 		
 		public function compose(pointX:Number, pointY:Number, normalX:Number, normalY:Number, penetration:Number):IContact
 		{
-			_point.x = pointX;
-			_point.y = pointY;
+			//_point.x = pointX;
+			//_point.y = pointY;
 			_normal.x = normalX;
 			_normal.y = normalY;
 			_penetration = penetration;
@@ -44,6 +44,13 @@ package orichalcum.physics.collision
 		{
 			_point = null;
 			_normal = null;
+		}
+		
+		public function inverse():IContact
+		{
+			_normal.x = -_normal.x;
+			_normal.y = -_normal.y;
+			return this;
 		}
 		
 		public function toString():String

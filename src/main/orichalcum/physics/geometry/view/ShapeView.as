@@ -13,6 +13,8 @@ package orichalcum.physics.geometry.view
 			_fillColor = fillColor ||= randomColor;
 			_lineColor = lineColor ||= fillColor;
 			_lineWidth = lineWidth;
+			
+			alpha = 0.5;
 		}
 		
 		public function render():void

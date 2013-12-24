@@ -116,11 +116,15 @@ package orichalcum.physics.body
 		
 		public function get mass():Number
 		{
+			if (isStatic) return 0;
+			
 			return _geometry.volume * _material.density;
 		}
 		
 		public function get inverseMass():Number
 		{
+			if (isStatic) return 0;
+			
 			const mass:Number = this.mass;
 			return mass == 0 ? 0 : 1 / mass;
 		}
@@ -242,6 +246,21 @@ package orichalcum.physics.body
 			*/
 			_geometry.translate(velocityX, velocityY, angularVelocity);
 			
+		}
+		
+		public function get isDynamic():Boolean 
+		{
+			return _type == BodyType.DYNAMIC;
+		}
+		
+		public function get isStatic():Boolean 
+		{
+			return _type == BodyType.STATIC;
+		}
+		
+		public function get isKinetic():Boolean 
+		{
+			return _type == BodyType.KINETIC;
 		}
 		
 	}

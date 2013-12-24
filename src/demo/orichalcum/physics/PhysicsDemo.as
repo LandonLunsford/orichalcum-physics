@@ -3,7 +3,7 @@ package orichalcum.physics
 	import flash.display.Sprite;
 	import orichalcum.physics.body.IBody;
 	import orichalcum.physics.context.IPhysicsContext;
-	import orichalcum.physics.force.GravitationalRotationForce;
+	import orichalcum.physics.force.RadialRotationForce;
 	import orichalcum.physics.geometry.AABB;
 	import orichalcum.physics.geometry.Point;
 	import orichalcum.physics.geometry.view.AABBView;
@@ -31,7 +31,7 @@ package orichalcum.physics
 			_context = new PhysicsContext();
 			_context.bodies.push(rectangleView);
 			
-			rectangleBody.forces.push(new GravitationalRotationForce(gravityCenter));
+			rectangleBody.forces.push(new RadialRotationForce(gravityCenter));
 			rectangleBody.x = stage.stageWidth * 0.5;
 			rectangleBody.y = stage.stageHeight * 0.25;
 			rectangleBody.rest();

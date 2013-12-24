@@ -26,34 +26,31 @@ package orichalcum.physics.collision.resolution
 			
 			const totalInverseMass:Number = inverseMassA + inverseMassB;
 			const totalInverseMassInversed:Number = totalInverseMass == 0 ? 0 : 1 / totalInverseMass;
-			const t:Number = Math.max(contact.penetration - slop, 0) / totalInverseMass * percent;
-			//const t:Number = contact.penetration * totalInverseMassInversed;
+			
+			/**
+			 * Allow for slop
+			 */
+			//const t:Number = Math.max(contact.penetration - slop, 0) / totalInverseMass * percent;
+			/**
+			 * Slopless precision!
+			 */
+			const t:Number = contact.penetration * totalInverseMassInversed;
+			
 			const separationX:Number = normalX * t;
 			const separationY:Number = normalY * t;
 			
 			//trace('separation',separationX, separationY, 't', t, 'p', contact.penetration);
 			
 			/**
-			 * This algorithm is deficient and needs to be percent based.
-			 * If the other object is static it does not move, and the other needs to move the full separation
+			 * This is a utility function used among different resolvers and should be refactored outward
+			 * 
 			 */
-			//if (bodyA.mass == 0)
-			//{
-				//bodyB.x += separationX;
-				//bodyB.y += separationY;
-			//}
-			//else if (bodyB.mass == 0)
-			//{
-				//bodyA.x -= separationX;
-				//bodyA.y -= separationY;
-			//}
-			//else
-			//{
-				bodyA.x -= separationX * inverseMassA;
-				bodyA.y -= separationY * inverseMassA;
-				bodyB.x += separationX * inverseMassB;
-				bodyB.y += separationY * inverseMassB;
-			//}
+			const inverseMassPortionA:Number = totalInverseMass - inverseMassB;
+			const inverseMassPortionB:Number = totalInverseMass - inverseMassA;
+			bodyA.x -= separationX * inverseMassPortionA;
+			bodyA.y -= separationY * inverseMassPortionA;
+			bodyB.x += separationX * inverseMassPortionB;
+			bodyB.y += separationY * inverseMassPortionB;
 			
 			bodyA.rest();
 			bodyB.rest();

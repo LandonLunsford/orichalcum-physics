@@ -2,12 +2,12 @@ package orichalcum.physics.force
 {
 	import orichalcum.physics.IBody;
 
-	public class GravitationalForce implements IForce
+	public class RadialGravitationalForce implements IForce
 	{
 		
 		private var _value:Number;
 		
-		public function GravitationalForce(value:Number = 1) 
+		public function RadialGravitationalForce(value:Number = 1) 
 		{
 			_value = value;
 		}

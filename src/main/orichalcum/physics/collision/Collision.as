@@ -53,6 +53,18 @@ package orichalcum.physics.collision
 			_contacts = null;
 		}
 		
+		public function inverse():void
+		{
+			const temporary:ICollidable = _collidableA;
+			_collidableA = _collidableB;
+			_collidableB = temporary;
+			
+			for each(var contact:Contact in _contacts)
+			{
+				contact.inverse();
+			}
+		}
+		
 		public function toString():String
 		{
 			return '{'

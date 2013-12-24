@@ -43,6 +43,10 @@ package orichalcum.physics.body
 		
 		function get type():int;
 		function set type(value:int):void;
+
+		function get isDynamic():Boolean;
+		function get isStatic():Boolean;
+		function get isKinetic():Boolean;
 		
 		function get geometry():IGeometry;
 		function set geometry(value:IGeometry):void;

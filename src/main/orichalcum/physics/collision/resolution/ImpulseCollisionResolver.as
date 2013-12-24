@@ -9,6 +9,9 @@ package orichalcum.physics.collision.resolution
 	 * This algorithm is unstable at times...
 	 * Sometimes the impulses will exceed bounds
 	 * and collidables grow in energy as energy is transfered
+	 * 
+	 * 
+	 * Something is screwed up particularly on the Y axis see AABBvAABB.as
 	 */
 	public class ImpulseCollisionResolver implements ICollisionResolver
 	{
@@ -75,15 +78,17 @@ package orichalcum.physics.collision.resolution
 			const impulseDenominator1:Number = (normalX * normalX + normalY * normalY) * totalInverseMass
 				+ contactPerpNormal1 * contactPerpNormal1 * inverseIA
 				+ contactPerpNormal2 * contactPerpNormal2 * inverseIB;
+				
 			const impulseDenominator2:Number = (tangentX * tangentX + tangentY * tangentY) * totalInverseMass
 				+ contactPerpTangent1 * contactPerpTangent1 * inverseIA
 				+ contactPerpTangent2 * contactPerpTangent2 * inverseIB;
 			
 			const restitution:Number = Math.min(elasticityA, elasticityB);//var restitution = (body1.elasticity + body2.elasticity) * 0.5;
-			//const friction:Number = (frictionA + frictionB) * 0.5;
+			
 			
 			// seems friction greater than .001 doesnt make sense...
-			const friction:Number = 0.1;
+			//const friction:Number = 0.1;
+			const friction:Number = (frictionA + frictionB) * 0.5;
 			
 			const impulse1:Number = (-(1 + restitution) * velocityAlongNormal) / impulseDenominator1;
 			const impulse2:Number = friction * -(relativeVelocityX * tangentX + relativeVelocityY * tangentY) / impulseDenominator2;

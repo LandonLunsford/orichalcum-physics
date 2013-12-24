@@ -32,8 +32,10 @@ package orichalcum.physics.simulation.lifecycle
 				/**
 				 * Kinetics do not obey the laws of physics
 				 * Only check dynamics against statics
+				 * 
+				 * NOT WORKING AS EXPECTED....
 				 */
-				if (collidableA.body.type & BodyType.KINETIC & BodyType.STATAIC) continue;
+				//if (collidableA.body.type & BodyType.KINETIC || collidableA.body.type & BodyType.STATIC) continue;
 				
 				
 				for (var j:int = i + 1; j < totalCollidables; j++)
@@ -44,7 +46,7 @@ package orichalcum.physics.simulation.lifecycle
 					/**
 					 * Kinetics do not obey the laws of physics
 					 */
-					if (collidableB.body.type & BodyType.KINETIC) continue;
+					//if (collidableB.body.type & BodyType.KINETIC) continue;
 					
 					/**
 					 * Apply user filters beyond body type combination filters

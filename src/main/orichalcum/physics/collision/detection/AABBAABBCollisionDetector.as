@@ -1,18 +1,10 @@
-/**
- * http://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-core-engine--gamedev-7493
- */
-
 package orichalcum.physics.collision.detection 
 {
-	import orichalcum.physics.body.IBody;
-	import orichalcum.physics.collision.Collision;
-	import orichalcum.physics.collision.Contact;
 	import orichalcum.physics.collision.ICollidable;
 	import orichalcum.physics.collision.ICollision;
 	import orichalcum.physics.context.IPhysicsContext;
 	import orichalcum.physics.context.IPhysicsContextAware;
 	import orichalcum.physics.geometry.AABB;
-	import orichalcum.physics.geometry.Circle;
 	
 	public class AABBAABBCollisionDetector implements ICollisionDetector, IPhysicsContextAware
 	{
@@ -79,8 +71,8 @@ package orichalcum.physics.collision.detection
 					);
 				}
 			}
-			//return null;
 		}
+		
 	}
 
 }
