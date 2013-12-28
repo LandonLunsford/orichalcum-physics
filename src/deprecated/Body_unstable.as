@@ -1,4 +1,4 @@
-package orichalcum.physics.body
+package  
 {
 	import orichalcum.geometry.IGeometry2;
 	import orichalcum.mathematics.Mathematics;
@@ -9,7 +9,7 @@ package orichalcum.physics.body
 	import orichalcum.physics.material.Material;
 
 
-	public class Body implements IBody
+	public class Body_unstable implements IBody
 	{
 		private var _x:Number = 0;
 		private var _y:Number = 0;
@@ -25,13 +25,10 @@ package orichalcum.physics.body
 		private var _forces:Vector.<IForce> = new Vector.<IForce>;
 		private var _changed:Boolean = true;
 		
-		public function Body(geometry:IGeometry = null, material:IMaterial = null) 
+		public function Body_unstable(geometry:IGeometry = null, material:IMaterial = null) 
 		{
 			this.geometry = geometry ? geometry : new Circle(0,0,1);
 			this.material = material ? material : Material.ROCK;
-			
-			_x = _previousX = geometry.x;
-			_y = _previousY = geometry.y;
 		}
 		
 		public function get x():Number 
@@ -41,12 +38,11 @@ package orichalcum.physics.body
 		
 		public function set x(value:Number):void 
 		{
-			if (isNaN(value))
-			{
-				var k:int = 0;
-			}
+			if (_x == value) return;
+			//const currentX:Number = _geometry.x;
 			_x = value;
 			_geometry.x = value;
+			//_previousX = currentX;
 			_changed = true;
 		}
 		
@@ -57,8 +53,11 @@ package orichalcum.physics.body
 		
 		public function set y(value:Number):void 
 		{
+			if (_y == value) return;
+			//const currentY:Number = _geometry.y;
 			_y = value;
 			_geometry.y = value;
+			//_previousY = currentY;
 			_changed = true;
 		}
 		
@@ -80,10 +79,6 @@ package orichalcum.physics.body
 		
 		public function set linearVelocityX(value:Number):void 
 		{
-			if (isNaN(value))
-			{
-				trace('nan')
-			}
 			_previousX = _x - value;
 		}
 		
@@ -230,11 +225,6 @@ package orichalcum.physics.body
 		public function update():void
 		{
 			
-			if (isNaN(_x))
-			{
-				var m:int = 0;
-			}
-			
 			/*
 				Key to verlet integration
 			*/
@@ -246,35 +236,24 @@ package orichalcum.physics.body
 			const velocityY:Number = this.linearVelocityY;
 			const angularVelocity:Number = this.angularVelocity;
 			
-			//if (!skipIntegration){
-			/*
-				Update geometric position for hit detection
-			*/
 			this.x += velocityX;
 			this.y += velocityY;
-			this.rotation += angularVelocity;
-			//}
-			/*
-				Invalidate for view rendering
-			*/
-			_changed = _changed
-				|| previousX != _x
-				|| previousY != _y
-				|| previousRotation != _rotation;
+			_rotation = _rotation + angularVelocity;
 			
-			/*
-				Complete step for verlet integration
-			*/
 			_previousX = previousX;
 			_previousY = previousY;
 			_previousRotation = previousRotation;
 			
-			if (isNaN(_previousX))
-			{
-				trace('stoppit')
-			}
+			/*
+				Invalidate for view rendering
+			*/
+			_changed = _changed || previousX != _x || previousY != _y || previousRotation != _rotation;
 			
-			//trace(forces)
+			/*
+				Update geometric position for hit detection
+			*/
+			//_geometry.translate(velocityX, velocityY, angularVelocity);
+			
 		}
 		
 		public function get isDynamic():Boolean 
@@ -291,26 +270,6 @@ package orichalcum.physics.body
 		{
 			return _type == BodyType.KINEMATIC;
 		}
-		
-		
-		
-		
-		
-		
-		
-		private var _skipIntegration:Boolean;
-		
-		
-		public function get skipIntegration():Boolean 
-		{
-			return _skipIntegration;
-		}
-		
-		public function set skipIntegration(value:Boolean):void 
-		{
-			_skipIntegration = value;
-		}
-		
 		
 	}
 

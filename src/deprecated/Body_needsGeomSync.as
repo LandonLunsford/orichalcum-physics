@@ -1,4 +1,4 @@
-package orichalcum.physics.body
+package  
 {
 	import orichalcum.geometry.IGeometry2;
 	import orichalcum.mathematics.Mathematics;
@@ -9,7 +9,7 @@ package orichalcum.physics.body
 	import orichalcum.physics.material.Material;
 
 
-	public class Body implements IBody
+	public class Body_needsGeomSync implements IBody
 	{
 		private var _x:Number = 0;
 		private var _y:Number = 0;
@@ -25,40 +25,41 @@ package orichalcum.physics.body
 		private var _forces:Vector.<IForce> = new Vector.<IForce>;
 		private var _changed:Boolean = true;
 		
-		public function Body(geometry:IGeometry = null, material:IMaterial = null) 
+		public function Body_needsGeomSync(geometry:IGeometry = null, material:IMaterial = null) 
 		{
 			this.geometry = geometry ? geometry : new Circle(0,0,1);
 			this.material = material ? material : Material.ROCK;
-			
-			_x = _previousX = geometry.x;
-			_y = _previousY = geometry.y;
 		}
 		
 		public function get x():Number 
 		{
+			//return _geometry.x;
 			return _x;
 		}
 		
 		public function set x(value:Number):void 
 		{
-			if (isNaN(value))
-			{
-				var k:int = 0;
-			}
+			//if (_x == value) return;
+			//const currentX:Number = _geometry.x;
 			_x = value;
-			_geometry.x = value;
+			//_geometry.x = value;
+			//_previousX = currentX;
 			_changed = true;
 		}
 		
 		public function get y():Number 
 		{
+			//return _geometry.y;
 			return _y;
 		}
 		
 		public function set y(value:Number):void 
 		{
+			//if (_y == value) return;
+			//const currentY:Number = _geometry.y;
 			_y = value;
-			_geometry.y = value;
+			//_geometry.y = value;
+			//_previousY = currentY;
 			_changed = true;
 		}
 		
@@ -75,36 +76,32 @@ package orichalcum.physics.body
 		
 		public function get linearVelocityX():Number 
 		{
-			return _x - _previousX;
+			return x - _previousX;
 		}
 		
 		public function set linearVelocityX(value:Number):void 
 		{
-			if (isNaN(value))
-			{
-				trace('nan')
-			}
-			_previousX = _x - value;
+			_previousX = x - value;
 		}
 		
 		public function get linearVelocityY():Number 
 		{
-			return _y - _previousY;
+			return y - _previousY;
 		}
 		
 		public function set linearVelocityY(value:Number):void 
 		{
-			_previousY = _y - value;
+			_previousY = y - value;
 		}
 		
 		public function get angularVelocity():Number 
 		{
-			return _rotation - _previousRotation;
+			return rotation - _previousRotation;
 		}
 		
 		public function set angularVelocity(value:Number):void 
 		{
-			_previousRotation = _rotation - value;
+			_previousRotation = rotation - value;
 		}
 		
 		public function get centerX():Number 
@@ -230,11 +227,6 @@ package orichalcum.physics.body
 		public function update():void
 		{
 			
-			if (isNaN(_x))
-			{
-				var m:int = 0;
-			}
-			
 			/*
 				Key to verlet integration
 			*/
@@ -246,35 +238,26 @@ package orichalcum.physics.body
 			const velocityY:Number = this.linearVelocityY;
 			const angularVelocity:Number = this.angularVelocity;
 			
-			//if (!skipIntegration){
-			/*
-				Update geometric position for hit detection
-			*/
 			this.x += velocityX;
 			this.y += velocityY;
 			this.rotation += angularVelocity;
-			//}
-			/*
-				Invalidate for view rendering
-			*/
-			_changed = _changed
-				|| previousX != _x
-				|| previousY != _y
-				|| previousRotation != _rotation;
 			
-			/*
-				Complete step for verlet integration
-			*/
 			_previousX = previousX;
 			_previousY = previousY;
 			_previousRotation = previousRotation;
 			
-			if (isNaN(_previousX))
-			{
-				trace('stoppit')
-			}
+			/*
+				Invalidate for view rendering
+			*/
+			_changed = _changed || previousX != _x || previousY != _y || previousRotation != _rotation;
 			
-			//trace(forces)
+			/*
+				Update geometric position for hit detection
+			*/
+			_geometry.translate(velocityX, velocityY, angularVelocity);
+			
+			trace('iter')
+			
 		}
 		
 		public function get isDynamic():Boolean 
@@ -291,26 +274,6 @@ package orichalcum.physics.body
 		{
 			return _type == BodyType.KINEMATIC;
 		}
-		
-		
-		
-		
-		
-		
-		
-		private var _skipIntegration:Boolean;
-		
-		
-		public function get skipIntegration():Boolean 
-		{
-			return _skipIntegration;
-		}
-		
-		public function set skipIntegration(value:Boolean):void 
-		{
-			_skipIntegration = value;
-		}
-		
 		
 	}
 

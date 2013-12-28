@@ -7,6 +7,7 @@ package orichalcum.physics.context
 	import orichalcum.physics.collision.Collision;
 	import orichalcum.physics.collision.Contact;
 	import orichalcum.physics.collision.detection.AABBAABBCollisionDetector;
+	import orichalcum.physics.collision.detection.AABBCircleCollisionDetector;
 	import orichalcum.physics.collision.detection.CircleCircleCollisionDetector;
 	import orichalcum.physics.collision.detection.filter.AABBIntersectionCollisionFilter;
 	import orichalcum.physics.collision.detection.filter.ICollisionFilter;
@@ -60,6 +61,7 @@ package orichalcum.physics.context
 			
 			mapDetector(AABB, AABB, new AABBAABBCollisionDetector)
 			mapDetector(Circle, Circle, new CircleCircleCollisionDetector)
+			mapDetector(AABB, Circle, new AABBCircleCollisionDetector)
 			
 			this.isPlaying = true;
 		}

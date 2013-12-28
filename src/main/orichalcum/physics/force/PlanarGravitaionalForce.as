@@ -27,6 +27,7 @@ package orichalcum.physics.force
 		{
 			body.linearVelocityX += value.x;
 			body.linearVelocityY += value.y;
+			trace('gravity application')
 		}
 		
 	}

@@ -14,8 +14,10 @@ package orichalcum.physics.simulation.lifecycle
 				{
 					collidable.onBodyChange();
 					collidable.body.changed = false;
+					
 				}
 			}
+			trace('rendered.')
 		}
 		
 	}

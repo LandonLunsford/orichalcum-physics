@@ -21,7 +21,7 @@ package orichalcum.physics
 			const fast:Number = stage.stageWidth * 0.035;
 			
 			const circleA:Circle = new Circle(stage.stageWidth * 0.1, stage.stageHeight * 0.48, stage.stageWidth * 0.05);
-			const circleBodyA:IBody = new Body(circleA, Material.METAL);
+			const circleBodyA:IBody = new Body(circleA, Material.BOUNCY_BALL);
 			const circleViewA:CircleView = new CircleView(circleBodyA, 0xabcdef, 0x333333, 1);
 			circleBodyA.linearVelocityX = fast;
 			

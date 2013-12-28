@@ -46,7 +46,7 @@ package orichalcum.physics.body
 
 		function get isDynamic():Boolean;
 		function get isStatic():Boolean;
-		function get isKinetic():Boolean;
+		function get isKinematic():Boolean;
 		
 		function get geometry():IGeometry;
 		function set geometry(value:IGeometry):void;

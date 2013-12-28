@@ -77,7 +77,7 @@ package orichalcum.physics.geometry
 		public function toString():String
 		{
 			return '{'
-				+ 'x:"' + x.toFixed(1)
+				+ 'x:' + x.toFixed(1)
 				+ ', y:' + y.toFixed(1)
 				+ '}';
 		}
